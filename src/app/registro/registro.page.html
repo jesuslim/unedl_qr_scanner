@@ -1,0 +1,123 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>registro</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <form [formGroup]="registroForm" (keyup.enter)="register(registroForm.value)">
+    <ion-item>
+      <ion-label position="floating">Nombre: </ion-label>
+      <ion-input formControlName="Nombre"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Apellido Paterno: </ion-label>
+      <ion-input formControlName="Apellido_Paterno"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Apellido Materno: </ion-label>
+      <ion-input formControlName="Apellido_Materno"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Matricula de UNEDL: </ion-label>
+      <ion-input formControlName="Matricula"></ion-input>
+    </ion-item>
+
+    <!--  -->
+    <ion-item>
+      <ion-select formControlName="Genero" label="Default label" placeholder="Genero:">
+        <ion-select-option value="Masculino">Masculino</ion-select-option>
+        <ion-select-option value="Femenino">Femenino</ion-select-option>
+        <ion-select-option value="Otro">Otro</ion-select-option>
+
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-select formControlName="ID_Perfil" label="Default label" placeholder="Perfil al que Perteneces:">
+        <ion-select-option *ngFor="let perfil of perfiles"
+          value="{{perfil.ID_Perfil}}">{{perfil.Nombre}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-select formControlName="ID_Licenciaturas" label="Default label" placeholder="Programa al que Perteneces:">
+        <ion-select-option *ngFor="let licenciatura of licenciaturas" value="{{licenciatura.ID_Licenciaturas}}">
+          {{licenciatura.Nombre}}</ion-select-option>
+
+      </ion-select>
+    </ion-item>
+    <!--  -->
+
+    <ion-label position="floating">Fecha Nacimiento: </ion-label>
+
+    <ion-input type="date" formControlName="Fecha_Nacimiento"></ion-input>
+
+    <ion-item>
+      <ion-label position="floating">Correo Electronico: </ion-label>
+      <ion-input formControlName="Correo_Electronico"></ion-input>
+    </ion-item>
+
+    <!--  -->
+    <ion-item>
+      <ion-label>Estado:</ion-label>
+      <select name="ID_Estado" class="form-control" formControlName="ID_Estado" id="ID_Estado"
+        (change)="setMunicipios()" required title="Campo requerido">
+        <option *ngFor="let estado of estados" value="{{estado.ID_Estado}}">{{estado.Estado}}</option>
+      </select>
+    </ion-item>
+    <ion-item>
+      <ion-label>Municipio:</ion-label>
+      <select name="ID_Municipio" class="form-control" formControlName="ID_Municipio" id="ID_Municipio" required
+        title="Campo requerido">
+        <option *ngFor="let municipio of municipios" value="{{municipio.ID_Municipio}}">{{municipio.Municipio}}</option>
+      </select>
+    </ion-item>
+    <!--  -->
+
+    <ion-item>
+      <ion-label position="floating">Colonia: </ion-label>
+      <ion-input formControlName="Colonia"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Codigo Postal: </ion-label>
+      <ion-input formControlName="Codigo_Postal"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-select formControlName="Entrenamiento" label="Default label" placeholder="Entrenamiento Previo:">
+        <ion-select-option value="1">Si</ion-select-option>
+        <ion-select-option value="0">No</ion-select-option>
+
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Tipo de Entrenamiento: </ion-label>
+      <ion-input formControlName="Tipo_Entrenamiento"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-select formControlName="Lesion" label="Default label" placeholder="Lesion Previa:">
+        <ion-select-option value="1">Si</ion-select-option>
+        <ion-select-option value="0">No</ion-select-option>
+
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Tipo de Lesion: </ion-label>
+      <ion-input formControlName="Tipo_Lesion"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Objetivo: </ion-label>
+      <ion-input formControlName="Objetivo"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Contraseña: </ion-label>
+      <ion-input type="password" formControlName="Contrasena"></ion-input>
+    </ion-item>
+
+    <ion-button (click)="register(registroForm.value)">Iniciar sesion</ion-button>
+
+
+  </form>
+</ion-content>

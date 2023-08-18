@@ -1,0 +1,35 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>login</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Login</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <form [formGroup]="formlogin" (keyup.enter)="login(formlogin.value)">
+        <ion-item>
+          <ion-label position="floating">Correo Electronico: </ion-label>
+          <ion-input formControlName="Correo_Electronico" type="email"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Contraseña: </ion-label>
+          <ion-input formControlName="Contrasena" type="password"></ion-input>
+        </ion-item>
+
+        <ion-button (click)="login(formlogin.value)">Iniciar sesion</ion-button>
+        <ion-button (click)="enter()">access without account</ion-button>
+
+      </form>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
+
+<ion-toolbar>
+  <ion-buttons slot="end">
+    <ion-button [routerLink]="['/registro']">Registrarse</ion-button>
+  </ion-buttons>
+</ion-toolbar>

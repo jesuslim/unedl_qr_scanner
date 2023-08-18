@@ -61,7 +61,7 @@ export class HomePage implements OnDestroy {
         this.scannedResult = result.content;
         console.log(this.scannedResult);
 
-        if (this.scannedResult == 'Codigo QR de prueba para el lector/scanner') {
+        if (this.scannedResult == '1234567890') {
           const alert = await this.alertController.create({
             header: 'Asistencia tomada!',
             message: 'Bienvenido con fureza.',
