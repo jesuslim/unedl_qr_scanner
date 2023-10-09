@@ -3,7 +3,8 @@ import {
   FormGroup,
   FormControl,
   Validators,
-  FormBuilder
+  FormBuilder,
+  AbstractControl
 } from '@angular/forms'
 import { EstadosService } from '../service/estados.service';
 import { MunicipiosService } from '../service/municipios.service';
@@ -42,7 +43,7 @@ export class RegistroPage implements OnInit {
         'Nombre': new FormControl('', Validators.required),
         'Apellido_Paterno': new FormControl('', Validators.required),
         'Apellido_Materno': new FormControl('', Validators.required),
-        'Matricula': new FormControl('', Validators.required),
+        'Matricula': new FormControl('', [Validators.required, Validators.pattern(/^[0-9]{2}[A-Z]{2}[0-9]{7}$/)]),
         'ID_Perfil': new FormControl('', Validators.required),
         'ID_Licenciaturas': new FormControl('', Validators.required),
         'Genero': new FormControl('', Validators.required),
@@ -58,6 +59,12 @@ export class RegistroPage implements OnInit {
         'Tipo_Lesion': new FormControl(''),
         'Objetivo': new FormControl(''),
         'Contrasena': new FormControl('', Validators.required),
+        'ConfirmarContrasena': new FormControl('', Validators.required),
+
+      },
+      {
+        // Validación personalizada para comparar la contraseña y la confirmación
+        validators: this.passwordMatchValidator,
       }
     )
 
@@ -106,44 +113,71 @@ export class RegistroPage implements OnInit {
       });
   }
 
+  // Función de validación personalizada para comparar contraseña y confirmación
+  passwordMatchValidator(control: AbstractControl): { mismatch: boolean } {
+    const password = control.get('Contrasena')?.value;
+    const confirmPassword = control.get('ConfirmarContrasena')?.value;
+
+    if (password !== confirmPassword) {
+      return { mismatch: true };
+    }
+
+    return { mismatch: false };
+  }
+
+  limitarLongitudYNumeros(event: any) {
+    const input = event.target;
+    const inputValue = input.value;
+
+    // Remover caracteres que no sean números
+    const numericValue = inputValue.replace(/[^0-9]/g, '');
+
+    // Limitar la longitud a 5 caracteres
+    const limitedValue = numericValue.slice(0, 5);
+
+    // Actualizar el valor del campo
+    input.value = limitedValue;
+
+    // Actualizar el valor en el formulario (si es necesario)
+    this.registroForm.get('Codigo_Postal')?.setValue(limitedValue);
+  }
+
+  validarNoNumerico(event: any) {
+    const input = event.target;
+    const inputValue = input.value;
+
+    // Remover dígitos numéricos
+    const nonNumericValue = inputValue.replace(/[0-9]/g, '');
+
+    // Actualizar el valor del campo
+    input.value = nonNumericValue;
+  }
+
   async register(form: any) {
 
-    if (this.registroForm.valid) {
-
-      this.usuariosService.saveUsuario(form).subscribe(
-        async (response) => {
-          console.log('creado ', response);
-          const alert = await this.alertController.create({
-            header: 'Exito',
-            message: 'Miembro registrado con exito',
-            buttons: ['Aceptar']
-          });
-
-          await alert.present();
-          this.router.navigate(['login']);
-          return;
-        },
-        async (err) => {
-          const alert = await this.alertController.create({
-            header: 'Oops! Error',
-            message: err.error.messages.error,
-            buttons: ['Aceptar']
-          });
-
-          await alert.present();
-          return;
+    this.usuariosService.saveUsuario(form).subscribe(
+      async (response) => {
+        console.log('creado ', response);
+        const alert = await this.alertController.create({
+          header: 'Exito',
+          message: 'Miembro registrado con exito',
+          buttons: ['Aceptar']
         });
-    } else {
-      const alert = await this.alertController.create({
-        header: 'Datos incompletos',
-        message: 'Tienes que llenar todos los datos',
-        buttons: ['Aceptar']
+
+        await alert.present();
+        this.router.navigate(['login']);
+        return;
+      },
+      async (err) => {
+        const alert = await this.alertController.create({
+          header: 'Oops! Error',
+          message: err.error.messages.error,
+          buttons: ['Aceptar']
+        });
+
+        await alert.present();
+        return;
       });
-      this.registroForm.markAllAsTouched();
-      await alert.present();
-      return;
-    }
-    console.log(form);
   }
 
 }

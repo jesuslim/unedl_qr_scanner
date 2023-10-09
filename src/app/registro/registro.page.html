@@ -11,20 +11,23 @@
   <form [formGroup]="registroForm" (keyup.enter)="register(registroForm.value)">
     <ion-item>
       <ion-label position="floating">Nombre: </ion-label>
-      <ion-input formControlName="Nombre"></ion-input>
+      <ion-input formControlName="Nombre" (keyup)="validarNoNumerico($event)"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label position="floating">Apellido Paterno: </ion-label>
-      <ion-input formControlName="Apellido_Paterno"></ion-input>
+      <ion-input formControlName="Apellido_Paterno" (keyup)="validarNoNumerico($event)"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label position="floating">Apellido Materno: </ion-label>
-      <ion-input formControlName="Apellido_Materno"></ion-input>
+      <ion-input formControlName="Apellido_Materno" (keyup)="validarNoNumerico($event)"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label position="floating">Matrícula de UNEDL: </ion-label>
-      <ion-input formControlName="Matricula"></ion-input>
+      <ion-input formControlName="Matricula" oninput="this.value = this.value.toUpperCase();"></ion-input>
     </ion-item>
+    <div *ngIf="registroForm.get('Matricula')?.hasError('pattern')" style="color: red;">
+      El formato de la matrícula no es válido.
+    </div>
 
     <!--  -->
     <ion-item>
@@ -81,11 +84,11 @@
 
     <ion-item>
       <ion-label position="floating">Colonia: </ion-label>
-      <ion-input formControlName="Colonia"></ion-input>
+      <ion-input formControlName="Colonia" (keyup)="validarNoNumerico($event)"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label position="floating">Codigo Postal: </ion-label>
-      <ion-input formControlName="Codigo_Postal"></ion-input>
+      <ion-input formControlName="Codigo_Postal" (keyup)="limitarLongitudYNumeros($event)"></ion-input>
     </ion-item>
     <ion-item>
       <ion-select formControlName="Entrenamiento" label="Default label" placeholder="Entrenamiento Previo:">
@@ -117,6 +120,14 @@
       <ion-label position="floating">Contraseña: </ion-label>
       <ion-input type="password" formControlName="Contrasena"></ion-input>
     </ion-item>
+    <ion-item>
+      <ion-label position="floating">Contraseña: </ion-label>
+      <ion-input type="password" formControlName="ConfirmarContrasena" id="ConfirmarContrasena"></ion-input>
+    </ion-item>
+    <!-- Mostrar mensaje de error si las contraseñas no coinciden -->
+    <div *ngIf="registroForm.hasError('mismatch')" style="color: red;">
+      Las contraseñas no coinciden.
+    </div>
 
     <ion-button (click)="register(registroForm.value)">Registrarse</ion-button>
 
