@@ -2,6 +2,8 @@ import { Component, OnDestroy } from '@angular/core';
 // import { BarcodeScanner } from '@awesome-cordova-plugins/barcode-scanner/ngx';
 import { BarcodeScanner } from '@capacitor-community/barcode-scanner';
 import { AlertController } from '@ionic/angular';
+import { AsistenciasService } from '../service/asistencias.service';
+import { QrService } from '../service/qr.service';
 
 @Component({
   selector: 'app-home',
@@ -11,14 +13,19 @@ import { AlertController } from '@ionic/angular';
 export class HomePage implements OnDestroy {
 
   // https://www.npmjs.com/package/angularx-qrcode
-  qrCodeString = 'Codigo QR de prueba para el lector/scanner';
+  qrCodeString = '';
   scannedResult: any;
   content_visibility = '';
+  user_id = localStorage.getItem("ID_Usuario");
+
 
   constructor(
     // private barcodeScanner: BarcodeScanner
     public alertController: AlertController,
-  ) { }
+    private asistensiaService: AsistenciasService,
+    private qrCodeService: QrService
+  ) {
+  }
 
   // startScan() {
   //   this.barcodeScanner.scan().then(barcodeData => {
@@ -61,22 +68,34 @@ export class HomePage implements OnDestroy {
         this.scannedResult = result.content;
         console.log(this.scannedResult);
 
-        if (this.scannedResult == '1234567890') {
-          const alert = await this.alertController.create({
-            header: 'Asistencia tomada!',
-            message: 'Bienvenido con fureza.',
-            buttons: ['Aceptar']
-          });
-          await alert.present();
-        } else {
-          const alert = await this.alertController.create({
-            header: 'Codigo equivocado!',
-            message: 'Prueba de nuevo.',
-            buttons: ['Aceptar']
-          });
-          await alert.present();
-        }
+        this.qrCodeService.getQrCode().subscribe(
+          async (response) => {
+            console.log(response[0].Codigo);
+            this.qrCodeString = response[0].Codigo;
+            const data = { ID_Miembro: this.user_id }
 
+            if (this.scannedResult == this.qrCodeString) {
+              this.asistensiaService.createAsistencias(data).subscribe(
+                async (response) => {
+                  const alert = await this.alertController.create({
+                    header: 'Bienvenido!',
+                    message: '¡Prepárate para entrenar!',
+                    buttons: ['Aceptar']
+                  });
+                  await alert.present();
+                }
+              );
+
+            } else {
+              const alert = await this.alertController.create({
+                header: 'Código no válido !',
+                message: '¡Prueba de nuevo o busca a un entrenador!',
+                buttons: ['Aceptar']
+              });
+              await alert.present();
+            }
+          }
+        );
       }
     } catch (e) {
       console.log(e);

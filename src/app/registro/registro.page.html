@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title>registro</ion-title>
+    <ion-title>Registro</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -22,13 +22,13 @@
       <ion-input formControlName="Apellido_Materno"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-label position="floating">Matricula de UNEDL: </ion-label>
+      <ion-label position="floating">Matrícula de UNEDL: </ion-label>
       <ion-input formControlName="Matricula"></ion-input>
     </ion-item>
 
     <!--  -->
     <ion-item>
-      <ion-select formControlName="Genero" label="Default label" placeholder="Genero:">
+      <ion-select formControlName="Genero" label="Default label" placeholder="Género:">
         <ion-select-option value="Masculino">Masculino</ion-select-option>
         <ion-select-option value="Femenino">Femenino</ion-select-option>
         <ion-select-option value="Otro">Otro</ion-select-option>
@@ -56,22 +56,24 @@
     <ion-input type="date" formControlName="Fecha_Nacimiento"></ion-input>
 
     <ion-item>
-      <ion-label position="floating">Correo Electronico: </ion-label>
+      <ion-label position="floating">Correo Electrónico: </ion-label>
       <ion-input formControlName="Correo_Electronico"></ion-input>
     </ion-item>
 
     <!--  -->
     <ion-item>
-      <ion-label>Estado:</ion-label>
+      <label>Estado:</label>
       <select name="ID_Estado" class="form-control" formControlName="ID_Estado" id="ID_Estado"
         (change)="setMunicipios()" required title="Campo requerido">
+        <option value="" disabled selected>Selecciona una opción</option>
         <option *ngFor="let estado of estados" value="{{estado.ID_Estado}}">{{estado.Estado}}</option>
       </select>
     </ion-item>
     <ion-item>
-      <ion-label>Municipio:</ion-label>
+      <label>Municipio:</label>
       <select name="ID_Municipio" class="form-control" formControlName="ID_Municipio" id="ID_Municipio" required
         title="Campo requerido">
+        <option value="" disabled selected>Selecciona una opción</option>
         <option *ngFor="let municipio of municipios" value="{{municipio.ID_Municipio}}">{{municipio.Municipio}}</option>
       </select>
     </ion-item>
@@ -116,7 +118,7 @@
       <ion-input type="password" formControlName="Contrasena"></ion-input>
     </ion-item>
 
-    <ion-button (click)="register(registroForm.value)">Iniciar sesion</ion-button>
+    <ion-button (click)="register(registroForm.value)">Registrarse</ion-button>
 
 
   </form>
